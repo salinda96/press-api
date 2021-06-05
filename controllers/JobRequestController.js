@@ -13,6 +13,7 @@ exports.getJobRequests= async (req, res, next) => {
             data: jobRequest
      
         });
+        
     } catch (err) {
         return res.status(500).json({
             success: false,
@@ -47,9 +48,11 @@ exports.getOneJobRequest = async (req, res, next) => {
 
 exports.addJobRequest = async (req, res, next) => {
     try {
+        // const generateID = await JobRequest.find()
         const { text, amount } = req.body;
 
         const jobRequest = await JobRequest.create(req.body);
+      
 
         return res.status(201).json({
             success: true,
@@ -108,6 +111,7 @@ exports.deleteJobRequest = async (req, res, next) => {
 
 exports.updateJobRequest = async (req, res, next) => {
     try {
+    
         const jobRequest = await JobRequest.findById(req.params.id);
 
         if(!jobRequest){
@@ -123,6 +127,29 @@ exports.updateJobRequest = async (req, res, next) => {
             success: true,
             data: jobRequest1
         });
+    } catch (err) {
+        return res.status(500).json({
+            success: false,
+            error: 'Server Error'
+        });
+    }
+}
+
+// @desc Get Last Job ID
+// @route GET /api/v1/jobRequest/ID
+// @access Public
+
+exports.getJobRequestsLastID= async (req, res, next) => {
+    try {
+        const jobRequest = await JobRequest.find();
+        count1 = jobRequest.length - 1;
+        return res.status(200).json({
+            success: true,
+            count: jobRequest.length,
+            data: jobRequest[count1].jobId
+     
+        });
+        
     } catch (err) {
         return res.status(500).json({
             success: false,
